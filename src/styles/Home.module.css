@@ -1,5 +1,71 @@
-.container {
+/* .container {
   padding: 0 2rem;
+} */
+
+.loginForm
+{
+  text-align: center;
+}
+
+.form
+{
+  display: flex;
+  flex-direction: column;
+}
+
+.inputField {
+  flex: 3;
+  font-size: large;
+}
+
+.inputButton {
+  flex: 1;
+  border-color: #2f2f3c;
+  margin-left: 1%;
+  border-radius: 50px;
+  font-size: large;
+  font-weight: bolder;
+
+}
+
+.inputField
+{
+  flex: 1;
+}
+
+
+.left {
+  display: flex;
+}
+
+.right {
+  display: flex;
+  justify-content: end;
+}
+
+.header {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #333;
+  color: white;
+}
+
+.header > li {
+  float: left;
+}
+
+.header > li a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+.header li a:hover {
+  background-color: rgb(123, 113, 113);
 }
 
 .main {
