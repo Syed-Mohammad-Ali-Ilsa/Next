@@ -2,37 +2,56 @@
   padding: 0 2rem;
 } */
 
-.loginForm
+.primaryColor
 {
+  background-color: #616161;
+  color: white;
+}
+
+.secondaryColor
+{
+  background-color: #9bc5c3;
+  color: white;
+}
+
+.loginForm {
   text-align: center;
 }
 
-.form
-{
+.form {
   display: flex;
   flex-direction: column;
-}
-
-.inputField {
-  flex: 3;
-  font-size: large;
-}
-
-.inputButton {
-  flex: 1;
-  border-color: #2f2f3c;
-  margin-left: 1%;
-  border-radius: 50px;
-  font-size: large;
-  font-weight: bolder;
-
+  margin: 5%;
 }
 
 .inputField
 {
-  flex: 1;
+  border: 10px solid black;
 }
 
+
+
+.inputHeadings {
+  flex: 1;
+  font-size: large;
+  padding: 2%;
+  text-align: start;
+}
+
+.inputButton {
+  flex: 1;
+  font-size: large;
+  padding: 1% 4%;
+  text-align: start;
+  border-radius: 50px;
+
+
+  
+}
+
+.inputField {
+  flex: 1;
+}
 
 .left {
   display: flex;
@@ -52,19 +71,24 @@
   color: white;
 }
 
-.header > li {
+.header > li , .header button {
   float: left;
 }
 
-.header > li a {
+.header > li a, .header > li button {
   display: block;
+  background-color: transparent;
   color: white;
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
 }
 
-.header li a:hover {
+.header > li button {
+  justify-self: flex-end;
+}
+
+.header li a:hover, .header li  p:hover {
   background-color: rgb(123, 113, 113);
 }
 

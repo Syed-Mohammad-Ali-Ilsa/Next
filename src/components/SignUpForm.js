@@ -1,23 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styles from "../styles/Home.module.css";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../firebase";
-import { getUserFromCookie, setUserCookie } from "../lib/userCookies";
+import { signUp } from "../firebase/index";
 import { useRouter } from "next/router";
 
-function LoginForm() {
-
-  const route = useRouter();
+function SignUpForm() {
   let emailRegex = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/;
   let phoneRegex = /^((\+92)?(0092)?(92)?(0)?)(3)([0-9]{9})$/gm;
   let emailCheck;
   let phoneCheck;
-  const [errorMessage, setErrorMessage] = useState("");
 
+  const route = useRouter();
   const [inputValue, setInputValue] = useState(false);
   const [password, setPassword] = useState(false);
-  const [user, setUser] = useState(getUserFromCookie());
-  console.log(user);
+  const [confirmPassword, setConfirmPassword] = useState(false);
 
   const handleChange = (value = "") => {
     console.log("Value: ", value);
@@ -33,43 +28,25 @@ function LoginForm() {
       ? setInputValue(phoneCheck)
       : setInputValue(false);
 
+    setInputValue(value);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Hello Next");
-    const res = inputValue
-      ? password
-        ? signInWithEmailAndPassword(
-            auth,
-            e.target.emailPhone.value,
-            e.target.password.value
-          )
-            .then((userCredential) => {
-              // Signed in
-              user = userCredential.user.accessToken;
-              console.log("This is Users response", user);
-              setUserCookie(JSON.stringify(user));
-              route.replace('/user/dashboard');
-              // ...
-            })
-            .catch((error) => {
-              const errorCode = error.code;
-              setErrorMessage(
-                error.message.includes("auth/user-not-found")
-                  ? "User not Found."
-                  : error.message.includes("auth/wrong-password")
-                  ? "Incorrect Password."
-                  : "Firebase Error."
-              );
-              console.log(error.message);
-            })
-        : setErrorMessage(
-            "Password must contain atleast one Capital, one small, one symbol and one digit"
-          )
-      : setErrorMessage("Email must contain @sample.com");
+    console.log("Submit Confirm Password", e.target.confirmPassword.value);
+    console.log("Submit Password", e.target.password.value);
 
-    console.log("This is the response: ", res);
+    console.log();
+
+    e.target.confirmPassword.value === e.target.password.value &&
+    password &&
+    confirmPassword &&
+    inputValue
+      ? signUp(e.target.emailPhone.value, e.target.password.value)
+      : console.log("Password didn't Match");
+
+    route.replace("/user/dashboard");
   };
 
   const handlePassword = (value = "") => {
@@ -91,9 +68,27 @@ function LoginForm() {
     );
   };
 
+  const handleConfirmPassword = (value = "") => {
+    console.log(
+      "Password matched",
+      /^[A-Za-z0-9\d=!\-@._*]*$/.test(value) &&
+        /[a-z]/.test(value) &&
+        /\d/.test(value) &&
+        value.length > 6 &&
+        value.length < 20
+    );
+
+    setConfirmPassword(
+      /^[A-Za-z0-9\d=!\-@._*]*$/.test(value) &&
+        /[a-z]/.test(value) &&
+        /\d/.test(value) &&
+        value.length > 6 &&
+        value.length < 20
+    );
+  };
+
   return (
     <form onSubmit={handleSubmit} className={styles.form}>
-      <p>{errorMessage}</p>
       <label className={styles.inputHeadings}>Email or Phone</label>
       <input
         name="emailPhone"
@@ -114,15 +109,27 @@ function LoginForm() {
         max="20"
       />
 
+      <label className={styles.inputHeadings}>Confirm Password</label>
+      <input
+        name="confirmPassword"
+        className={styles.inputField}
+        type="password"
+        onChange={(e) => {
+          handleConfirmPassword(e.target.value);
+        }}
+        min="6"
+        max="20"
+      />
+
       <div className={styles.inputHeadings}>
         <input
           className={`${styles.inputButton} ${styles.secondaryColor}`}
           type="submit"
-          value="Login"
+          value="Sign Up"
         />
       </div>
     </form>
   );
 }
 
-export default LoginForm;
+export default SignUpForm;
