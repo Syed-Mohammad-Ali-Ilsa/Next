@@ -1,26 +1,19 @@
 import React, { useEffect, useState } from "react";
 import styles from "../styles/Home.module.css";
-import {
-  signInWithEmailAndPassword,
-  signInWithPhoneNumber,
-  RecaptchaVerifier,
-} from "firebase/auth";
+import { signInWithPhoneNumber, RecaptchaVerifier } from "firebase/auth";
 import { auth } from "../firebase";
 import { getUserFromCookie, setUserCookie } from "../lib/userCookies";
 import { useRouter } from "next/router";
 
-function LoginForm({ mode = "email" }) {
+function LoginFormPhone() {
   const route = useRouter();
-  let emailRegex = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/;
   let phoneRegex = /^((\+92)?(0092)?(92)?(0)?)(3)([0-9]{9})$/gm;
-  const [emailCheck, setEmailCheck] = useState(false);
-  const [phoneCheck, setPhoneCheck] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [recaptchaVerifier, setRecaptchaVerifier] = useState();
   const [confirmationResult, setConfirmationResult] = useState();
+  const [opt, setOtp] = useState(false);
 
   const [inputValue, setInputValue] = useState("");
-  const [password, setPassword] = useState(true);
   const [user, setUser] = useState(getUserFromCookie());
 
   const handleChange = (value = "") => {
@@ -35,30 +28,9 @@ function LoginForm({ mode = "email" }) {
       : setInputValue(false);
   };
 
-  const signInEmail = (email, password) => {
-    signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        // Signed in
-        user = userCredential.user.accessToken;
-        setUserCookie(JSON.stringify(user));
-        route.replace("/user/dashboard");
-        // ...
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        setErrorMessage(
-          error.message.includes("auth/user-not-found")
-            ? "User not Found."
-            : error.message.includes("auth/wrong-password")
-            ? "Incorrect Password."
-            : "Firebase Error."
-        );
-      });
-  };
-
   useEffect(() => {
     setRecaptcha();
-  }, []);
+  }, [recaptchaVerifier]);
 
   const setRecaptcha = () => {
     setRecaptchaVerifier(
@@ -79,7 +51,7 @@ function LoginForm({ mode = "email" }) {
     // var appVerifier = recaptchaVerifier;
     signInWithPhoneNumber(
       auth,
-      document.getElementById("emailPhone").value,
+      document.getElementById("phone").value,
       recaptchaVerifier
     )
       .then((confirmationResult) => {
@@ -87,6 +59,7 @@ function LoginForm({ mode = "email" }) {
         // user in with confirmationResult.confirm(code).
         setErrorMessage("SMS sent please check your phone.");
         setConfirmationResult(confirmationResult);
+        setOtp(true);
         showVarificationCode();
         alert("set");
         // ...
@@ -118,7 +91,7 @@ function LoginForm({ mode = "email" }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     // const res = emailCheck
-    //   ? signInEmail(e.target.emailPhone.value, e.target.password.value)
+    //   ? signInEmail(e.target.phone.value, e.target.password.value)
     //   : phoneCheck
     //   ? onSignInSubmit(e.target.password.value)
     //   : setErrorMessage("Please enter Valid Phone number or Email");
@@ -147,8 +120,8 @@ function LoginForm({ mode = "email" }) {
       <p>{errorMessage}</p>
       <label className={styles.inputHeadings}>Email or Phone</label>
       <input
-        name="emailPhone"
-        id="emailPhone"
+        name="phone"
+        id="phone"
         className={styles.inputField}
         type="text"
         onChange={(e) => handleChange(e.target.value)}
@@ -163,28 +136,32 @@ function LoginForm({ mode = "email" }) {
           className={`${styles.inputButton} ${styles.secondaryColor}`}
         />
       </div>
-      
-      <label className={styles.inputHeadings}>Password or OTP</label>
-      <input
-        name="password"
-        className={styles.inputField}
-        type="password"
-        onChange={(e) => {
-          handlePassword(e.target.value);
-        }}
-        min="6"
-        max="20"
-      />
 
-      <div className={styles.inputHeadings}>
-        <input
-          className={`${styles.inputButton} ${styles.secondaryColor}`}
-          type="submit"
-          value="Login"
-        />
-      </div>
+      {otp && (
+        <div>
+          <label className={styles.inputHeadings}>Password or OTP</label>
+          <input
+            name="password"
+            className={styles.inputField}
+            type="password"
+            onChange={(e) => {
+              handlePassword(e.target.value);
+            }}
+            min="6"
+            max="20"
+          />
+
+          <div className={styles.inputHeadings}>
+            <input
+              className={`${styles.inputButton} ${styles.secondaryColor}`}
+              type="submit"
+              value="Login"
+            />
+          </div>
+        </div>
+      )}
     </form>
   );
 }
 
-export default LoginForm;
+export default LoginFormPhone;

@@ -5,6 +5,8 @@ import {
   getAuth,
   createUserWithEmailAndPassword,
   onAuthStateChanged,
+  browserSessionPersistence,
+  browserPopupRedirectResolver,
 } from "firebase/auth";
 import { setUserCookie } from "../lib/userCookies";
 
@@ -25,7 +27,10 @@ const firebaseConfig = {
 
 // Initialize Firebase
 export const app = initializeApp(firebaseConfig);
-export const auth = getAuth(app);
+export const auth = getAuth(app, {
+  persistence: browserSessionPersistence,
+  popupRedirectResolver: browserPopupRedirectResolver,
+});
 
 export const signUp = (email, password) => {
   const u = createUserWithEmailAndPassword(auth, email, password)

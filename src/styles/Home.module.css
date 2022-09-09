@@ -59,7 +59,7 @@
 
 .right {
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
 }
 
 .header {
@@ -71,11 +71,11 @@
   color: white;
 }
 
-.header > li , .header button {
+.header > li {
   float: left;
 }
 
-.header > li a, .header > li button {
+.header > li a, .header > li p {
   display: block;
   background-color: transparent;
   color: white;
@@ -84,7 +84,7 @@
   text-decoration: none;
 }
 
-.header > li button {
+.header > li p {
   justify-self: flex-end;
 }
 
