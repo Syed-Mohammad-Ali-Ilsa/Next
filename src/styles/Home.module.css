@@ -2,6 +2,7 @@
   padding: 0 2rem;
 } */
 
+<<<<<<< HEAD
 .primaryColor
 {
   background-color: #616161;
@@ -36,10 +37,27 @@
   font-size: large;
   padding: 2%;
   text-align: start;
+=======
+.loginForm
+{
+  text-align: center;
+}
+
+.form
+{
+  display: flex;
+  flex-direction: column;
+}
+
+.inputField {
+  flex: 3;
+  font-size: large;
+>>>>>>> 8bfc36669512b1d6b44725613ef12035939494d2
 }
 
 .inputButton {
   flex: 1;
+<<<<<<< HEAD
   font-size: large;
   padding: 1% 4%;
   text-align: start;
@@ -53,13 +71,33 @@
   flex: 1;
 }
 
+=======
+  border-color: #2f2f3c;
+  margin-left: 1%;
+  border-radius: 50px;
+  font-size: large;
+  font-weight: bolder;
+
+}
+
+.inputField
+{
+  flex: 1;
+}
+
+
+>>>>>>> 8bfc36669512b1d6b44725613ef12035939494d2
 .left {
   display: flex;
 }
 
 .right {
   display: flex;
+<<<<<<< HEAD
   justify-content: flex-end;
+=======
+  justify-content: end;
+>>>>>>> 8bfc36669512b1d6b44725613ef12035939494d2
 }
 
 .header {
@@ -75,20 +113,29 @@
   float: left;
 }
 
+<<<<<<< HEAD
 .header > li a, .header > li p {
   display: block;
   background-color: transparent;
+=======
+.header > li a {
+  display: block;
+>>>>>>> 8bfc36669512b1d6b44725613ef12035939494d2
   color: white;
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
 }
 
+<<<<<<< HEAD
 .header > li p {
   justify-self: flex-end;
 }
 
 .header li a:hover, .header li  p:hover {
+=======
+.header li a:hover {
+>>>>>>> 8bfc36669512b1d6b44725613ef12035939494d2
   background-color: rgb(123, 113, 113);
 }
 

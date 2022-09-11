@@ -1,6 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
+<<<<<<< HEAD
 import {
   getAuth,
   createUserWithEmailAndPassword,
@@ -10,6 +11,8 @@ import {
 } from "firebase/auth";
 import { setUserCookie } from "../lib/userCookies";
 
+=======
+>>>>>>> 8bfc36669512b1d6b44725613ef12035939494d2
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -27,6 +30,7 @@ const firebaseConfig = {
 
 // Initialize Firebase
 export const app = initializeApp(firebaseConfig);
+<<<<<<< HEAD
 export const auth = getAuth(app, {
   persistence: browserSessionPersistence,
   popupRedirectResolver: browserPopupRedirectResolver,
@@ -62,3 +66,8 @@ onAuthStateChanged(auth, (user) => {
 });
 
 // const analytics = getAnalytics(app);
+=======
+// const analytics = getAnalytics(app);
+
+
+>>>>>>> 8bfc36669512b1d6b44725613ef12035939494d2

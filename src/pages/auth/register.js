@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React from "react";
 import Header from "../../components/Header";
 import SignUpForm from "../../components/SignUpForm";
@@ -38,3 +39,14 @@ function register({ user }) {
 }
 
 export default register;
+=======
+import React from 'react'
+
+function register() {
+  return (
+    <div>register</div>
+  )
+}
+
+export default register
+>>>>>>> 8bfc36669512b1d6b44725613ef12035939494d2

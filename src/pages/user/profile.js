@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { useRouter } from "next/router";
 import React from "react";
 import Header from "../../components/Header";
@@ -34,3 +35,14 @@ function profile({ user }) {
 }
 
 export default profile;
+=======
+import React from 'react'
+
+function profile() {
+  return (
+    <div>profile</div>
+  )
+}
+
+export default profile
+>>>>>>> 8bfc36669512b1d6b44725613ef12035939494d2

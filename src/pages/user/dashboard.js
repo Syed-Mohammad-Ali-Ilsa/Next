@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { useRouter } from "next/router";
 import React from "react";
 import Header from "../../components/Header";
@@ -33,3 +34,14 @@ function dashboard({ user }) {
 }
 
 export default dashboard;
+=======
+import React from 'react'
+
+function dashboard() {
+  return (
+    <div>dashboard</div>
+  )
+}
+
+export default dashboard
+>>>>>>> 8bfc36669512b1d6b44725613ef12035939494d2
