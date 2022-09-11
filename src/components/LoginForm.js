@@ -146,7 +146,7 @@ function LoginForm({}) {
           onChange={(e) => handleChange(e.target.value)}
         />
 
-        <label className={styles.inputHeadings}>Password or OTP</label>
+        <label className={styles.inputHeadings}>Password</label>
         <input
           name="password"
           className={styles.inputField}
