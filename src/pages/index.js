@@ -7,17 +7,22 @@ import { useState } from "react";
 import { getUserFromCookie, removeUserCookie } from "../lib/userCookies";
 import { getCookie } from "cookies-next";
 import { auth } from "../firebase";
+import { authenticateUser } from "../firebase/admin";
 
-export const getServerSideProps = ({ req, res }) => {
-  let user = getCookie("auth", { req, res }) || null;
-  const loggedInUser = auth.currentUser;
 
-  console.log("User in cookies: ", user);
-  console.log("User in auth: ", loggedInUser);
+export const getServerSideProps = async ({ req, res }) => {
+  let user = getCookie("auth", { req, res }) || "";
+  let response;
+  const userToken = user !== null ? (response = await authenticateUser(user)) : "";
 
-  if (user === null || user !== loggedInUser) {
+  console.log("This is problem: ", userToken);
+  if (userToken === "" || userToken === null ) {
     removeUserCookie();
     user = null;
+    return {
+      props: { user },
+    };
+  } else {
     return {
       props: { user },
     };
@@ -25,8 +30,6 @@ export const getServerSideProps = ({ req, res }) => {
 };
 
 export default function Home({ user }) {
-
-
   return (
     <div className={styles.container}>
       <Header userToken={user} />

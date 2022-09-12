@@ -35,13 +35,12 @@ export const auth = getAuth(app, {
 
 export const currentUser = auth.currentUser;
 
-export const signUp = (email, password) => {
-  const u = createUserWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
+export const signUp = async (email, password) => {
+  const u = await createUserWithEmailAndPassword(auth, email, password)
+    .then(async (userCredential) => {
       // Signed in
-      const user = userCredential.user.accessToken;
+      const user = await userCredential.user.accessToken;
       setUserCookie(JSON.stringify(user));
-
       // ...
     })
     .catch((error) => {
@@ -75,5 +74,4 @@ onAuthStateChanged(auth, (user) => {
     // ...
   }
 });
-d
 // const analytics = getAnalytics(app);

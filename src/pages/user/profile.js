@@ -5,17 +5,21 @@ import styles from "../../styles/Home.module.css";
 import { getCookies, getCookie, setCookies, removeCookies } from "cookies-next";
 import { removeUserCookie } from "../../lib/userCookies";
 import { auth, currentUser } from "../../firebase";
+import { authenticateUser } from "../../firebase/admin";
 
 
 
-export const getServerSideProps = ({ req, res }) => {
+
+export const getServerSideProps = async ({ req, res }) => {
   let user = getCookie("auth", { req, res }) || null;
-
-
+  let userToken = user;
+  let response;
   console.log("User in cookies: ", user);
   console.log("User in auth: ", currentUser);
+  userToken = user !== null ? (response = await authenticateUser(user)) : "";
 
-  if (user === null || user !== currentUser) {
+  if (userToken === "") {
+    console.log("this is our res: ", response);
     removeUserCookie();
     user = null;
     return {

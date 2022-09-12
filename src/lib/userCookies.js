@@ -5,7 +5,15 @@ export const getUserFromCookie = () => {
   if (!cookie) {
     return null;
   }
-  return JSON.parse(cookie);
+  try {
+    return JSON.parse(cookie);
+  }
+  catch (e)
+  {
+    removeUserCookie();
+    return "";
+  }
+  
 };
 
 export const setUserCookie = (user) => {

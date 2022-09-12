@@ -72,7 +72,7 @@ function LoginForm({}) {
         // User signed in successfully.
         user = result.user.accessToken;
 
-        setUserCookie(JSON.stringify(user));
+        setUserCookie(user);
         route.replace("/user/dashboard");
         // ...
       })

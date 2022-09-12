@@ -1,4 +1,5 @@
 import * as firebaseAdmin from "firebase-admin";
+import { removeUserCookie } from "../lib/userCookies";
 
 import serviceAccount from "./serviceAccountCredentials.json";
 
@@ -12,18 +13,30 @@ if (!firebaseAdmin.apps.length) {
   });
 }
 
-export const authenticateUser = (user) => {
-  console.log("mohad: ", user);
-  firebaseAdmin
-    .auth()
-    .verifyIdToken(user)
-    .then((decodedToken) => {
-      const uid = decodedToken.uid;
-      console.log("User Authenticated");
-      // ...
-    })
-    .catch((error) => {
-      // Handle error
-      console.log("Authentication Failed");
-    });
+export function authenticateUser(user){
+
+  let userToken;
+  console.log("user: ", user);
+  try {
+    user = JSON.parse(user);
+  } catch (e) {
+    user = "";
+    removeUserCookie();
+  }
+  
+
+  return userToken = user !== null
+    ? firebaseAdmin
+        .auth()
+        .verifyIdToken(user)
+        .then(function(decodedToken) {
+          return decodedToken.uid;
+          // ...
+        })
+        .catch((error) => {
+          // Handle error
+          removeUserCookie();
+          return "";
+        })
+    : "";
 };

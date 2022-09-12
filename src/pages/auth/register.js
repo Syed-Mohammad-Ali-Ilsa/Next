@@ -5,14 +5,18 @@ import styles from "../../styles/Home.module.css";
 import { getCookies, getCookie, setCookies, removeCookies } from "cookies-next";
 import { auth, currentUser } from "../../firebase";
 import { removeUserCookie } from "../../lib/userCookies";
+import { authenticateUser } from "../../firebase/admin";
 
-export const getServerSideProps = ({ req, res }) => {
+export const getServerSideProps = async ({ req, res }) => {
   let user = getCookie("auth", { req, res }) || null;
+
+  let response;
+  user = user !== null ? (response = await authenticateUser(user)) : "";
 
   console.log("User in cookies: ", user);
   console.log("User in auth: ", currentUser);
 
-  if (user !== null && user === currentUser) {
+  if (user !== "") {
     return {
       redirect: {
         destination: "/user/dashboard",

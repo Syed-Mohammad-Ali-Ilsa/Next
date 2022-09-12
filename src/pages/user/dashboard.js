@@ -7,25 +7,16 @@ import { auth, currentUser } from "../../firebase";
 import { removeUserCookie } from "../../lib/userCookies";
 import { authenticateUser } from "../../firebase/admin";
 
-
-
-
-
-export const getServerSideProps = ({ req, res }) => {
-
-  
+export const getServerSideProps = async ({ req, res }) => {
   let user = getCookie("auth", { req, res }) || null;
+  let userToken = user;
+  let response;
 
+  userToken = user !== null ? (response = await authenticateUser(user)) : "";
+  console.log("This is register user: ", userToken);
 
-  console.log("User in cookies: ", user);
-  console.log("User in auth: ", currentUser);
-  const response = authenticateUser(user);
-
-  if (user === null) {
-
-      
-
-      console.log("this is our res: ", response);
+  if (userToken === "") {
+    console.log("this is our res: ", response);
     removeUserCookie();
     user = null;
     return {
@@ -34,11 +25,11 @@ export const getServerSideProps = ({ req, res }) => {
         permanent: false,
       },
     };
+  } else {
+    return {
+      props: { user },
+    };
   }
-
-  return {
-    props: { user },
-  };
 };
 
 function dashboard({ user }) {

@@ -31,7 +31,7 @@ function SignUpForm() {
     setInputValue(value);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("Hello Next");
     console.log("Submit Confirm Password", e.target.confirmPassword.value);
@@ -43,7 +43,7 @@ function SignUpForm() {
     password &&
     confirmPassword &&
     inputValue
-      ? signUp(e.target.emailPhone.value, e.target.password.value)
+      ? await signUp(e.target.emailPhone.value, e.target.password.value)
       : console.log("Password didn't Match");
 
     route.replace("/user/dashboard");
