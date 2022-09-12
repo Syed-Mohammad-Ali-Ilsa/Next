@@ -1,31 +1,31 @@
-<<<<<<< HEAD
 import React from "react";
 import Header from "../../components/Header";
 import SignUpForm from "../../components/SignUpForm";
 import styles from "../../styles/Home.module.css";
 import { getCookies, getCookie, setCookies, removeCookies } from "cookies-next";
-
-
+import { auth, currentUser } from "../../firebase";
+import { removeUserCookie } from "../../lib/userCookies";
 
 export const getServerSideProps = ({ req, res }) => {
-  const user = getCookie("auth", { req, res }) || null;
-  console.log("This is server side cookie: ", user);
+  let user = getCookie("auth", { req, res }) || null;
 
-  if (user !== null) {
+
+  console.log("User in cookies: ", user);
+  console.log("User in auth: ", currentUser);
+
+  if (user !== null && user === currentUser) {
     return {
       redirect: {
         destination: "/user/dashboard",
         permanent: false,
       },
     };
-  }
-  else {
+  } else {
+    user = null;
     return {
       props: { user },
     };
   }
-
-  
 };
 
 function register({ user }) {
@@ -39,14 +39,3 @@ function register({ user }) {
 }
 
 export default register;
-=======
-import React from 'react'
-
-function register() {
-  return (
-    <div>register</div>
-  )
-}
-
-export default register
->>>>>>> 8bfc36669512b1d6b44725613ef12035939494d2

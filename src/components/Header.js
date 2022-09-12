@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import styles from "../styles/Home.module.css";
@@ -34,15 +33,6 @@ const Header = ({ userToken }) => {
           Home
         </Link>
       </li>
-=======
-import React from "react";
-import Link from "next/link";
-import styles from "../styles/Home.module.css";
-
-const Header = ({ auth = false }) => {
-  return auth === true ? (
-    <ul className={`${styles.header} ${styles.left}`}>
->>>>>>> 8bfc36669512b1d6b44725613ef12035939494d2
       <li>
         <Link className={styles.link} href="/user/dashboard">
           Dashboard
@@ -53,7 +43,6 @@ const Header = ({ auth = false }) => {
           Profile
         </Link>
       </li>
-<<<<<<< HEAD
       <li>
         <a
           className={styles.link}
@@ -70,11 +59,6 @@ const Header = ({ auth = false }) => {
           Home
         </Link>
       </li>
-=======
-    </ul>
-  ) : (
-    <ul className={`${styles.header} ${styles.right}`}>
->>>>>>> 8bfc36669512b1d6b44725613ef12035939494d2
       <li>
         <Link className={styles.link} href="/auth/login">
           Login
