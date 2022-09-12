@@ -4,15 +4,32 @@ import styles from "../styles/Home.module.css";
 import Header from "../components/Header";
 import MyApp from "./_app";
 import { useState } from "react";
-import { getUserFromCookie } from "../lib/userCookies";
+import { getUserFromCookie, removeUserCookie } from "../lib/userCookies";
+import { getCookie } from "cookies-next";
+import { auth } from "../firebase";
+
+export const getServerSideProps = ({ req, res }) => {
+  let user = getCookie("auth", { req, res }) || null;
+  const loggedInUser = auth.currentUser;
+
+  console.log("User in cookies: ", user);
+  console.log("User in auth: ", loggedInUser);
+
+  if (user === null || user !== loggedInUser) {
+    removeUserCookie();
+    user = null;
+    return {
+      props: { user },
+    };
+  }
+};
+
+export default function Home({ user }) {
 
 
-export default function Home() {
-
- const userToken = getUserFromCookie();
   return (
     <div className={styles.container}>
-      <Header userToken={userToken} />
+      <Header userToken={user} />
     </div>
   );
 }

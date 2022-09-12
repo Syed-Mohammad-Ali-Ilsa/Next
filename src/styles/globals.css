@@ -7,7 +7,10 @@ body {
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 50d14502780e76d8cb4902633adca3343ca29c3d
 
 a {
   color: inherit;
@@ -21,9 +24,10 @@ a {
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;
+    background: rgb(129, 122, 122);
   }
   body {
     color: white;
-    background: black;
+    background: rgb(129, 122, 122);
   }
 }

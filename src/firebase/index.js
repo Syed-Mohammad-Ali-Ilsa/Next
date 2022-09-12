@@ -26,11 +26,14 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-export const app = initializeApp(firebaseConfig);
+
+export const app = initializeApp(firebaseConfig, "user");
 export const auth = getAuth(app, {
   persistence: browserSessionPersistence,
   popupRedirectResolver: browserPopupRedirectResolver,
 });
+
+export const currentUser = auth.currentUser;
 
 export const signUp = (email, password) => {
   const u = createUserWithEmailAndPassword(auth, email, password)
@@ -61,4 +64,16 @@ onAuthStateChanged(auth, (user) => {
   }
 });
 
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    // User is signed in, see docs for a list of available properties
+    // https://firebase.google.com/docs/reference/js/firebase.User
+    const uid = user.uid;
+    // ...
+  } else {
+    // User is signed out
+    // ...
+  }
+});
+d
 // const analytics = getAnalytics(app);

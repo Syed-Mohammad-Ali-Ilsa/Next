@@ -11,26 +11,24 @@ function LoginFormPhone() {
   const [errorMessage, setErrorMessage] = useState("");
   const [recaptchaVerifier, setRecaptchaVerifier] = useState();
   const [confirmationResult, setConfirmationResult] = useState();
-  const [opt, setOtp] = useState(false);
+
+  const [otp, setOtp] = useState(false);
 
   const [inputValue, setInputValue] = useState("");
+  const [otpCode, setOtpCode] = useState("");
   const [user, setUser] = useState(getUserFromCookie());
 
   const handleChange = (value = "") => {
     setInputValue(value);
-    setEmailCheck(emailRegex.test(value));
-    setPhoneCheck(phoneRegex.test(value));
 
-    emailCheck
-      ? setInputValue(emailCheck)
-      : phoneCheck
-      ? setInputValue(phoneCheck)
-      : setInputValue(false);
+
+    phoneRegex.test(value) ? setInputValue(value) : setInputValue("");
+
   };
 
   useEffect(() => {
     setRecaptcha();
-  }, [recaptchaVerifier]);
+  }, []);
 
   const setRecaptcha = () => {
     setRecaptchaVerifier(
@@ -49,34 +47,38 @@ function LoginFormPhone() {
 
   const signInPhone = () => {
     // var appVerifier = recaptchaVerifier;
-    signInWithPhoneNumber(
-      auth,
-      document.getElementById("phone").value,
-      recaptchaVerifier
-    )
-      .then((confirmationResult) => {
-        // SMS sent. Prompt user to type the code from the message, then sign the
-        // user in with confirmationResult.confirm(code).
-        setErrorMessage("SMS sent please check your phone.");
-        setConfirmationResult(confirmationResult);
-        setOtp(true);
-        showVarificationCode();
-        alert("set");
-        // ...
-      })
-      .catch((error) => {
-        setErrorMessage("Couldn't Send SMS.");
-      });
+
+    inputValue !== ""
+      ? signInWithPhoneNumber(auth, inputValue, recaptchaVerifier)
+          .then((confirmationResult) => {
+            // SMS sent. Prompt user to type the code from the message, then sign the
+            // user in with confirmationResult.confirm(code).
+            setErrorMessage("SMS sent please check your phone.");
+            setConfirmationResult(confirmationResult);
+            setOtp(true);
+            alert("OTP sent please Check your phone.");
+            // ...
+          })
+          .catch((error) => {
+            setErrorMessage("Couldn't Send SMS.");
+          })
+      : alert("Please enter a valid Phone number with +92 Prefix.");
   };
 
   const onSignInSubmit = (value) => {
-    const code = value;
+
+    //
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const code = otpCode;
     confirmationResult
       .confirm(code)
       .then((result) => {
         // User signed in successfully.
         user = result.user.accessToken;
-
         setUserCookie(JSON.stringify(user));
         route.replace("/user/dashboard");
         // ...
@@ -88,16 +90,9 @@ function LoginFormPhone() {
       });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // const res = emailCheck
-    //   ? signInEmail(e.target.phone.value, e.target.password.value)
-    //   : phoneCheck
-    //   ? onSignInSubmit(e.target.password.value)
-    //   : setErrorMessage("Please enter Valid Phone number or Email");
-  };
-
   const handlePassword = (value = "") => {
+
+    value !== "" ? setOtpCode(value) : setOtpCode("");
     // console.log(
     //   "Password matched",
     //   /^[A-Za-z0-9\d=!\-@._*]*$/.test(value) &&
@@ -131,19 +126,19 @@ function LoginFormPhone() {
         <input
           type="button"
           id="smsButton"
-          value="Login"
+          value="Generate OTP"
           onClick={signInPhone}
           className={`${styles.inputButton} ${styles.secondaryColor}`}
         />
       </div>
 
       {otp && (
-        <div>
-          <label className={styles.inputHeadings}>Password or OTP</label>
+        <>
+          <label className={styles.inputHeadings}>OTP</label>
           <input
-            name="password"
+            name="otp"
             className={styles.inputField}
-            type="password"
+            type="text"
             onChange={(e) => {
               handlePassword(e.target.value);
             }}
@@ -158,7 +153,7 @@ function LoginFormPhone() {
               value="Login"
             />
           </div>
-        </div>
+        </>
       )}
     </form>
   );

@@ -2,14 +2,29 @@ import React, { useState } from "react";
 import Header from "../../components/Header";
 import LoginForm from "../../components/LoginForm";
 import styles from "../../styles/Home.module.css";
-import { getCookies, getCookie, setCookies, removeCookies } from "cookies-next";
-import LoginFormPhone from "../../components/LoginFormPhone";
+import { getCookie } from "cookies-next";
+import { currentUser } from "../../firebase";
+import { removeUserCookie } from "../../lib/userCookies";
+import { authenticateUser } from "../../firebase/admin";
+// import { adminApp } from "../../firebase/admin";
+
 
 export const getServerSideProps = ({ req, res }) => {
-  const user = getCookie("auth", { req, res }) || null;
-  console.log("This is server side cookie: ", user);
+  let user = getCookie("auth", { req, res }) || null;
 
-  if (user === null) {
+  const response = authenticateUser(user);
+
+  console.log("this is our res: ", response);
+
+  
+
+  console.log("User in cookies: ", user);
+  // console.log("User in auth: ", a()(user));
+  
+  if (user === null || user !== currentUser) {
+    removeUserCookie();
+    user = null;
+
     return {
       props: { user },
     };
@@ -24,19 +39,13 @@ export const getServerSideProps = ({ req, res }) => {
 };
 
 const login = ({ user }) => {
-  let mode = "email";
 
-  const handleToggleMode = () => {
-    mode === "email" ? (mode = "phone") : (mode = "email");
-  };
 
   return (
     <div className={styles.loginForm}>
       <Header userToken={user} />
       <h2>Login with Email</h2>
-      
-
-      <LoginForm mode={mode} handleToggleMode={handleToggleMode} />
+      <LoginForm />
     </div>
   ) 
 };
