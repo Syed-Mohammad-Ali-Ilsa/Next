@@ -9,8 +9,9 @@ import { auth } from "../firebase";
 import { getUserFromCookie, setUserCookie } from "../lib/userCookies";
 import { useRouter } from "next/router";
 
-function LoginForm({ mode = "email" }) {
+function LoginForm({ mode = "email", handleToggleMode }) {
   const route = useRouter();
+
   let emailRegex = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/;
   let phoneRegex = /^((\+92)?(0092)?(92)?(0)?)(3)([0-9]{9})$/gm;
   const [emailCheck, setEmailCheck] = useState(false);
@@ -143,47 +144,50 @@ function LoginForm({ mode = "email" }) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className={styles.form}>
-      <p>{errorMessage}</p>
-      <label className={styles.inputHeadings}>Email or Phone</label>
-      <input
-        name="emailPhone"
-        id="emailPhone"
-        className={styles.inputField}
-        type="text"
-        onChange={(e) => handleChange(e.target.value)}
-      />
-
-      <div className={styles.inputHeadings}>
+    <>
+      <button onClick={handleToggleMode}>Login with Phone? </button>
+      <form onSubmit={handleSubmit} className={styles.form}>
+        <p>{errorMessage}</p>
+        <label className={styles.inputHeadings}>Email or Phone</label>
         <input
-          type="button"
-          id="smsButton"
-          value="Login"
-          onClick={signInPhone}
-          className={`${styles.inputButton} ${styles.secondaryColor}`}
+          name="emailPhone"
+          id="emailPhone"
+          className={styles.inputField}
+          type="text"
+          onChange={(e) => handleChange(e.target.value)}
         />
-      </div>
-      
-      <label className={styles.inputHeadings}>Password or OTP</label>
-      <input
-        name="password"
-        className={styles.inputField}
-        type="password"
-        onChange={(e) => {
-          handlePassword(e.target.value);
-        }}
-        min="6"
-        max="20"
-      />
 
-      <div className={styles.inputHeadings}>
+        <div className={styles.inputHeadings}>
+          <input
+            type="button"
+            id="smsButton"
+            value="Login"
+            onClick={signInPhone}
+            className={`${styles.inputButton} ${styles.secondaryColor}`}
+          />
+        </div>
+
+        <label className={styles.inputHeadings}>Password or OTP</label>
         <input
-          className={`${styles.inputButton} ${styles.secondaryColor}`}
-          type="submit"
-          value="Login"
+          name="password"
+          className={styles.inputField}
+          type="password"
+          onChange={(e) => {
+            handlePassword(e.target.value);
+          }}
+          min="6"
+          max="20"
         />
-      </div>
-    </form>
+
+        <div className={styles.inputHeadings}>
+          <input
+            className={`${styles.inputButton} ${styles.secondaryColor}`}
+            type="submit"
+            value="Login"
+          />
+        </div>
+      </form>
+    </>
   );
 }
 
