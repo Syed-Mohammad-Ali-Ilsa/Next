@@ -5,11 +5,19 @@ import { signOut } from "firebase/auth";
 import { useRouter } from "next/router";
 import { auth } from "../firebase";
 import { getUserFromCookie, removeUserCookie } from "../lib/userCookies";
+import { useSession } from "next-auth/react";
+
 
 const Header = ({ userToken }) => {
   const [user, setUser] = useState(userToken);
-
   const route = useRouter();
+
+  // const { data: session, status } = useSession();
+
+  // console.log("Session Data: ", session);
+  // console.log("Session Status: ", status);
+
+  
 
   const handleLogout = (e) => {
     signOut(auth)

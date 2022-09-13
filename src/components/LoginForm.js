@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { signIn } from "next-auth/react"
 import styles from "../styles/Home.module.css";
 import {
   signInWithEmailAndPassword,
@@ -22,11 +23,8 @@ function LoginForm({}) {
   const [user, setUser] = useState(getUserFromCookie());
 
   const handleChange = (value = "") => {
-    emailRegex.test(value)
-      ? setInputValue(value)
-      : setInputValue("");
+    emailRegex.test(value) ? setInputValue(value) : setInputValue("");
   };
-
 
   // const setRecaptcha = () => {
   //   setRecaptchaVerifier(
@@ -86,27 +84,31 @@ function LoginForm({}) {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    inputValue !== "" &&
-      password !== "" &&
-      signInWithEmailAndPassword(auth, inputValue, password)
-        .then((userCredential) => {
-          // Signed in
-          user = userCredential.user.accessToken;
-          setUserCookie(JSON.stringify(user));
-          route.replace("/user/dashboard");
-          console.log("This is new: ", auth.currentUser.accessToken);
-          // ...
-        })
-        .catch((error) => {
-          const errorCode = error.code;
-          setErrorMessage(
-            error.message.includes("auth/user-not-found")
-              ? "User not Found."
-              : error.message.includes("auth/wrong-password")
-              ? "Incorrect Password."
-              : "Firebase Error."
-          );
-        });
+    inputValue !== "" && password !== ""
+      ? signInWithEmailAndPassword(auth, inputValue, password)
+          .then((userCredential) => {
+            // Signed in
+            user = userCredential.user.accessToken;
+            setUserCookie(JSON.stringify(user));
+            route.replace("/user/dashboard");
+            console.log("This is new: ", auth.currentUser.accessToken);
+            // ...
+          })
+          .catch((error) => {
+            const errorCode = error.code;
+            setErrorMessage(
+              error.message.includes("auth/user-not-found")
+                ? "User not Found."
+                : error.message.includes("auth/wrong-password")
+                ? "Incorrect Password."
+                : "Firebase Error."
+            );
+          })
+      : inputValue === ""
+      ? setErrorMessage("Incorrect Email")
+      : setErrorMessage(
+          "Incorrect Password Format <must contain one capital letter, one small letter, one special character and one digit>"
+        );
   };
 
   const handlePassword = (value = "") => {
@@ -138,6 +140,13 @@ function LoginForm({}) {
       >
         Login with Phone?
       </button>
+      <button
+        onClick={() =>
+          signIn("google")
+        }
+      >
+        Sign in with Google
+      </button>
       <form onSubmit={handleSubmit} className={styles.form}>
         <p>{errorMessage}</p>
         <label className={styles.inputHeadings}>Email or Phone</label>
@@ -148,7 +157,6 @@ function LoginForm({}) {
           type="text"
           onChange={(e) => handleChange(e.target.value)}
         />
-
 
         <label className={styles.inputHeadings}>Password</label>
 
@@ -172,7 +180,6 @@ function LoginForm({}) {
         </div>
       </form>
     </>
-
   ) : (
     <>
       <button
